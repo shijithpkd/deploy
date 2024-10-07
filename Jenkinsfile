@@ -26,7 +26,7 @@ pipeline {
     stage('Deploy to Kubernetes') {
       steps {
         script {
-          sh 'sed -i 's|image: .*|image: ${DOCKER_BFLASK_IMAGE}:latest|' deployment.yaml'
+          sh "sed -i 's|image: .*|image: ${DOCKER_BFLASK_IMAGE}:latest|' deployment.yaml"
           withCredentials([file(credentialsId: 'kubernetes-config-file', variable: 'KUBECONFIG')]) {
                         sh 'kubectl apply -f deployment.yaml'
                         sh 'kubectl apply -f service.yaml'
