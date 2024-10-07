@@ -3,7 +3,8 @@ pipeline {
 
     environment {
         // Define environment variables if needed
-        SONARQUBE_SCANNER_HOME = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        SONARQUBE_SCANNER_HOME = tool(name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation')
+        SONARQUBE_URL = 'http://34.28.223.41:9000/'  // Ensure you define the SonarQube URL
     }
 
     stages {
@@ -18,16 +19,16 @@ pipeline {
             steps {
                 // Wrap the SonarQube analysis within the SonarQube environment
                 withSonarQubeEnv('SonarQube') { // 'SonarQube' is the name of your SonarQube server in Jenkins
-                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
-                    // Execute SonarQube Scanner
-                       sh """
-                          ${env.SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
-                              -Dsonar.projectKey=my-flask-app \
-                              -Dsonar.sources=. \
-                              -Dsonar.host.url=${SONARQUBE_URL} \
-                              -Dsonar.login=${SONARQUBE_TOKEN}
-                    """
-                   }
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
+                        // Execute SonarQube Scanner
+                        sh """
+                            ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
+                                -Dsonar.projectKey=my-flask-app \
+                                -Dsonar.sources=. \
+                                -Dsonar.host.url=${SONARQUBE_URL} \
+                                -Dsonar.login=${SONARQUBE_TOKEN}
+                        """
+                    }
                 }
             }
         }
