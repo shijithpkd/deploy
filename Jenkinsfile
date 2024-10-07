@@ -27,8 +27,8 @@ pipeline {
       steps {
         script {
           withCredentials([file(credentialsId: 'kubernetes-config-file', variable: 'KUBECONFIG')]) {
-                        sh 'kubectl apply -f deploy/deployment.yaml'
-                        sh 'kubectl apply -f deploy/service.yaml'
+                        sh 'kubectl apply -f deployment.yaml'
+                        sh 'kubectl apply -f service.yaml'
           }
         }
       }
