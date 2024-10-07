@@ -19,7 +19,7 @@ pipeline {
             steps {
                 // Wrap the SonarQube analysis within the SonarQube environment
                 withSonarQubeEnv('SonarQube') { // 'SonarQube' is the name of your SonarQube server in Jenkins
-                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONARQUBE_TOKEN')]) {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {
                         // Execute SonarQube Scanner
                         sh """
                             ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
