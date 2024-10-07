@@ -18,14 +18,16 @@ pipeline {
             steps {
                 // Wrap the SonarQube analysis within the SonarQube environment
                 withSonarQubeEnv('SonarQube') { // 'SonarQube' is the name of your SonarQube server in Jenkins
+                    withCredentials([string(credentialsId: 'sonarqube-token', variable: 'SONAR_AUTH_TOKEN')]) {
                     // Execute SonarQube Scanner
-                    sh """
-                        ${env.SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
-                            -Dsonar.projectKey=my-flask-app \
-                            -Dsonar.sources=. \
-                            -Dsonar.host.url=${SONARQUBE_URL} \
-                            -Dsonar.login=${SONARQUBE_TOKEN}
+                       sh """
+                          ${env.SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
+                              -Dsonar.projectKey=my-flask-app \
+                              -Dsonar.sources=. \
+                              -Dsonar.host.url=${SONARQUBE_URL} \
+                              -Dsonar.login=${SONARQUBE_TOKEN}
                     """
+                   }
                 }
             }
         }
