@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // Define environment variables if needed
-        SONARQUBE_SCANNER_HOME = tool name: 'SonarQube Scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        SONARQUBE_SCANNER_HOME = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
     }
 
     stages {
