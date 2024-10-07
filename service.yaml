@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: my-flask-app
-  type: NodePort #Type of the Kubernetes Service
+  type: NodePort #Type of the Kubernetes Service nodeport
   ports:
   - protocol: TCP
     port: 5000 #Service port
