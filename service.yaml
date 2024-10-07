@@ -8,5 +8,5 @@ spec:
   type: NodePort #Type of the Kubernetes Service nodeport changed to Nodeport
   ports:
   - protocol: TCP
-    port: 5000 #Service port
+    port: 5000 #Service port test
     targetPort: 5000 #The port for the application container
