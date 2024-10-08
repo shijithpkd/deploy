@@ -2,9 +2,10 @@ pipeline {
     agent any
 
     environment {
-        // Define environment variables if needed
+        // Define environment variables
         SONARQUBE_SCANNER_HOME = tool(name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation')
-        SONARQUBE_URL = 'http://34.28.223.41:9000/'  // Ensure you define the SonarQube URL
+        SONARQUBE_URL = 'http://34.28.223.41:9000/'  // SonarQube URL
+
     }
 
     stages {
@@ -18,7 +19,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 // Wrap the SonarQube analysis within the SonarQube environment
-                withSonarQubeEnv('SonarQube') { // 'SonarQube' is the name of your SonarQube server in Jenkins
+                withSonarQubeEnv('SonarQube') {  // 'SonarQube' is the name of your SonarQube server in Jenkins
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {
                         // Execute SonarQube Scanner
                         sh """
@@ -36,7 +37,7 @@ pipeline {
         stage('Build') {
             steps {
                 sh 'docker build -t my-flask-app .'
-                sh 'docker tag my-flask-app $DOCKER_BFLASK_IMAGE'
+                sh 'docker tag my-flask-app ${DOCKER_BFLASK_IMAGE}'
             }
         }
 
@@ -49,27 +50,27 @@ pipeline {
         stage('Quality Gate') {
             steps {
                 script {
-		    echo "Waiting for Quality Gate result..."
-                    timeout(time: 15, unit: 'MINUTES') { // Increased timeout	
+                    echo "Waiting for Quality Gate result..."
+                    timeout(time: 15, unit: 'MINUTES') {  // Increased timeout
                         def qualityGate = waitForQualityGate()
-                    
-                    	if (qualityGate.status != 'OK') {
-                        	echo "${qualityGate.status}"
-                        	error "Quality Gate failed: ${qualityGate.status}"
-                    	}
-                   	 else {
-                       		echo "${qualityGate.status}"
-                       		echo "SonarQube Quality Gates Passed"
-			}
+
+                        if (qualityGate.status != 'OK') {
+                            echo "${qualityGate.status}"
+                            error "Quality Gate failed: ${qualityGate.status}"
+                        } else {
+                            echo "${qualityGate.status}"
+                            echo "SonarQube Quality Gates Passed"
+                        }
+                    }
                 }
             }
         }
 
         stage('Deploy') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                withCredentials([usernamePassword(credentialsId: 'docker-registry-creds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io"
-                    sh 'docker push $DOCKER_BFLASK_IMAGE'
+                    sh 'docker push ${DOCKER_BFLASK_IMAGE}'
                 }
             }
         }
@@ -92,7 +93,6 @@ pipeline {
             sh 'docker logout'
         }
         failure {
-            // Optionally, send notifications or perform other actions on failure
             echo 'Pipeline failed!'
         }
     }
