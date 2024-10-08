@@ -53,7 +53,7 @@ pipeline {
                     
                     if (qualityGate.status != 'OK') {
                         echo "${qualityGate.status}"
-                        error "Quality Gate failed: ${qualityGateStatus}"
+                        error "Quality Gate failed: ${qualityGate.status}"
                     }
                     else {
                         echo "${qualityGate.status}"
