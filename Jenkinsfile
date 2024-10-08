@@ -18,7 +18,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                // Wrap the SonarQube analysis within the SonarQube environment
+                // Wrap the SonarQube analysis within the SonarQube environment.
                 withSonarQubeEnv('SonarQube') {  // 'SonarQube' is the name of your SonarQube server in Jenkins
                     withCredentials([string(credentialsId: 'sonar-token', variable: 'SONARQUBE_TOKEN')]) {
                         // Execute SonarQube Scanner
