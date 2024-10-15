@@ -24,7 +24,7 @@ pipeline {
                         // Execute SonarQube Scanner
                         sh """
                             ${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
-                                -Dsonar.projectKey=my-flask-app \
+                                -Dsonar.projectKey=Webb-app \
                                 -Dsonar.sources=. \
                                 -Dsonar.host.url=${SONARQUBE_URL} \
                                 -Dsonar.login=${SONARQUBE_TOKEN}
